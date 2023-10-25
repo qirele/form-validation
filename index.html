@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js" defer></script>
+    <title>form js validation</title>
+  </head>
+  <body>
+    <div class="content-wrapper">
+      <h1>The most custom validation evah</h1>
+
+      <form novalidate>
+        <div class="row">
+          <div class="input-wrapper">
+            <label for="email">Email:</label>
+            <span class="required">required</span>
+            <input type="text" name="email" id="email" />
+            <p class="error"></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-wrapper">
+            <label for="country"></label>
+            <span class="required">required</span>
+            <select name="country" id="country"></select>
+            <p class="error"></p>
+          </div>
+          <div class="input-wrapper">
+            <label for="zipcode"></label>
+            <input type="text" id="zipcode" name="zipcode" />
+            <p class="error"></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-wrapper">
+            <label for="password"></label>
+            <span class="required">required</span>
+            <input type="password" id="password" />
+            <p class="error"></p>
+          </div>
+          <div class="input-wrapper">
+            <label for="password-confirm"></label>
+            <span class="required">required</span>
+            <input type="text" id="password-confirm" name="password-confirm" />
+            <p class="error"></p>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
