@@ -104,3 +104,15 @@ select.invalid:focus {
   color: #f1f1f1;
   outline: 5px solid rgb(199, 255, 188);
 }
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.error-container .success {
+  padding: 0.3rem;
+  background-color: greenyellow;
+  color: #1f1f1f;
+}

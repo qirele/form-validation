@@ -1,4 +1,5 @@
 const form = document.querySelector('.form');
+const errorContainer = document.querySelector(".error-container");
 const email = document.querySelector("#email");
 const country = document.querySelector("#country");
 const zipcode = document.querySelector("#zipcode");
@@ -9,6 +10,27 @@ const countryError = document.querySelector("#country ~ .error");
 const zipcodeError = document.querySelector("#zipcode ~ .error");
 const passwordError = document.querySelector("#password ~ .error");
 const passwordConfirmError = document.querySelector("#password-confirm ~ .error");
+
+// For each country, defines the pattern that the ZIP has to follow
+const constraints = {
+  ch: [
+    "^(CH-)?\\d{4}$",
+    "Switzerland ZIPs must have exactly 4 digits: e.g. CH-1950 or 1950",
+  ],
+  fr: [
+    "^(F-)?\\d{5}$",
+    "France ZIPs must have exactly 5 digits: e.g. F-75012 or 75012",
+  ],
+  de: [
+    "^(D-)?\\d{5}$",
+    "Germany ZIPs must have exactly 5 digits: e.g. D-12345 or 12345",
+  ],
+  nl: [
+    "^(NL-)?\\d{4}\\s*([A-RT-Z][A-Z]|S[BCE-RT-Z])$",
+    "Netherlands ZIPs must have exactly 4 digits, followed by 2 capital letters except SA, SD and SS",
+  ],
+};
+
 
 form.addEventListener("submit", handleSubmit);
 email.addEventListener("input", handleInputEmail);
@@ -46,27 +68,6 @@ function handleInputEmail(e) {
 }
 
 function checkZIP() {
-
-  // For each country, defines the pattern that the ZIP has to follow
-  const constraints = {
-    ch: [
-      "^(CH-)?\\d{4}$",
-      "Switzerland ZIPs must have exactly 4 digits: e.g. CH-1950 or 1950",
-    ],
-    fr: [
-      "^(F-)?\\d{5}$",
-      "France ZIPs must have exactly 5 digits: e.g. F-75012 or 75012",
-    ],
-    de: [
-      "^(D-)?\\d{5}$",
-      "Germany ZIPs must have exactly 5 digits: e.g. D-12345 or 12345",
-    ],
-    nl: [
-      "^(NL-)?\\d{4}\\s*([A-RT-Z][A-Z]|S[BCE-RT-Z])$",
-      "Netherlands ZIPs must have exactly 4 digits, followed by 2 capital letters except SA, SD and SS",
-    ],
-  };
-
   if (country.value === "none") {
 
     if (zipcode.value.length !== 0) {
@@ -108,10 +109,6 @@ function handleInputCountry() {
     countryError.className = "error";
     countryError.textContent = "";
   }
-}
-
-function handleSubmit(e) {
-  e.preventDefault();
 }
 
 function handleInputPassword(e) {
@@ -197,5 +194,79 @@ function handleInputPasswordConfirm(e) {
     passwordConfirm.className = "";
     passwordConfirmError.className = "error";
     passwordConfirmError.textContent = "";
+  }
+}
+
+function handleSubmit(e) {
+  e.preventDefault();
+
+  while (errorContainer.firstChild) {
+    errorContainer.removeChild(errorContainer.firstChild);
+  }
+
+  let shouldSubmit = true;
+
+  // check email
+  if (email.validity.valueMissing) {
+    const p = document.createElement("p");
+    p.className = "error active";
+    p.textContent = "Forgot the email bud";
+    errorContainer.appendChild(p);
+    shouldSubmit = false;
+  } else if (email.validity.typeMismatch) {
+    const p = document.createElement("p");
+    p.className = "error active";
+    p.textContent = "Provided email is not correct buddy";
+    errorContainer.appendChild(p);
+    shouldSubmit = false;
+  }
+
+  // check country
+  if (country.value === "none") {
+    const p = document.createElement("p");
+    p.className = "error active";
+    p.textContent = "Forgot to input country pal?";
+    errorContainer.appendChild(p);
+    shouldSubmit = false;
+  }
+
+
+  // check zipcode
+  if (country.value !== "none") {
+    const [constraint, errorMsg] = constraints[country.value];
+
+    const regex = new RegExp(constraint);
+
+    if (!(regex.test(zipcode.value) || zipcode.value.length === 0)) {
+      const p = document.createElement("p");
+      p.className = "error active";
+      p.textContent = errorMsg;
+      errorContainer.appendChild(p);
+      shouldSubmit = false;
+    }
+  }
+
+  // check passwords
+  if (password.validity.valueMissing || passwordConfirm.validity.valueMissing) {
+    const p = document.createElement("p");
+    p.className = "error active";
+    p.textContent = "Uh huh. So, yeah. You forgot to input password";
+    errorContainer.appendChild(p);
+    shouldSubmit = false;
+  } else {
+    if (passwordError.className.indexOf("active") !== -1 || passwordConfirmError.className.indexOf("active") !== -1) {
+      const p = document.createElement("p");
+      p.className = "error active";
+      p.textContent = "Pal, there's summat wrong with your password, check it";
+      errorContainer.appendChild(p);
+      shouldSubmit = false;
+    }
+  }
+
+  if (shouldSubmit) {
+    const p = document.createElement("p");
+    p.className = "success";
+    p.textContent = "great success, high five";
+    errorContainer.appendChild(p);
   }
 }
