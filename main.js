@@ -3,10 +3,12 @@ const email = document.querySelector("#email");
 const country = document.querySelector("#country");
 const zipcode = document.querySelector("#zipcode");
 const password = document.querySelector("#password");
-const passwordError = document.querySelector("#password ~ .error");
+const passwordConfirm = document.querySelector("#password-confirm");
 const emailError = document.querySelector("#email ~ .error");
 const countryError = document.querySelector("#country ~ .error");
 const zipcodeError = document.querySelector("#zipcode ~ .error");
+const passwordError = document.querySelector("#password ~ .error");
+const passwordConfirmError = document.querySelector("#password-confirm ~ .error");
 
 form.addEventListener("submit", handleSubmit);
 email.addEventListener("input", handleInputEmail);
@@ -15,7 +17,14 @@ zipcode.addEventListener("input", checkZIP);
 country.addEventListener("input", checkZIP);
 country.addEventListener("input", handleInputCountry);
 country.addEventListener("focusout", handleInputCountry);
+
 password.addEventListener("input", handleInputPassword);
+password.addEventListener("focusout", handleInputPassword);
+password.addEventListener("input", handleInputPasswordConfirm); // these fields are connected so they have to be reactive to each other
+
+passwordConfirm.addEventListener("input", handleInputPasswordConfirm);
+passwordConfirm.addEventListener("focusout", handleInputPasswordConfirm);
+passwordConfirm.addEventListener("input", handleInputPassword); // these fields are connected so they have to be reactive to each other
 
 function handleInputEmail(e) {
   const emailRegExp =
@@ -64,7 +73,7 @@ function checkZIP() {
       zipcode.className = "invalid";
       zipcodeError.className = "error active";
       zipcodeError.textContent = "Select a country before providing zipcode";
-      return; 
+      return;
     }
     zipcode.className = "";
     zipcodeError.className = "error";
@@ -155,8 +164,9 @@ function handleInputPassword(e) {
       if (!isNaN(letter)) {
         continue;
       } else {
-        // its a alphabetic letter, in here we can maybe safely compare letters with toUpperCase()
-        if (letter === letter.toUpperCase())
+        // its an alphabetic letter and maybe a special character, in here we can maybe safely compare letters with toUpperCase()
+        // https://stackoverflow.com/a/9728437
+        if (letter === letter.toUpperCase() && letter !== letter.toLowerCase())
           return true;
       }
     }
@@ -178,3 +188,14 @@ function handleInputPassword(e) {
   }
 }
 
+function handleInputPasswordConfirm(e) {
+  if (password.value !== passwordConfirm.value || (password.value.length === 0 && passwordConfirm.value.length === 0)) {
+    passwordConfirm.className = "invalid";
+    passwordConfirmError.className = "error active";
+    passwordConfirmError.textContent = "Passwords don't match";
+  } else {
+    passwordConfirm.className = "";
+    passwordConfirmError.className = "error";
+    passwordConfirmError.textContent = "";
+  }
+}
