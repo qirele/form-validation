@@ -2,6 +2,8 @@ const form = document.querySelector('.form');
 const email = document.querySelector("#email");
 const country = document.querySelector("#country");
 const zipcode = document.querySelector("#zipcode");
+const password = document.querySelector("#password");
+const passwordError = document.querySelector("#password ~ .error");
 const emailError = document.querySelector("#email ~ .error");
 const countryError = document.querySelector("#country ~ .error");
 const zipcodeError = document.querySelector("#zipcode ~ .error");
@@ -12,7 +14,7 @@ zipcode.addEventListener("input", checkZIP);
 country.addEventListener("input", checkZIP);
 country.addEventListener("input", handleInputCountry);
 country.addEventListener("focus", handleInputCountry);
-
+password.addEventListener("input", handleInputPassword);
 
 function handleInputEmail(e) {
   const emailRegExp =
@@ -55,10 +57,12 @@ function checkZIP() {
     ],
   };
 
-  // on each input on the "zipcode", grab the current select value of "country", and grab the value inside #zipcode
-  // on each input on the "country", -----------======-----------
-
-  if (country.value === "none") return;
+  if (country.value === "none") {
+    zipcode.className = ""
+    zipcodeError.className = "error";
+    zipcodeError.textContent = "";
+    return;
+  }
 
   const [constraint, errorMsg] = constraints[country.value];
 
@@ -91,3 +95,77 @@ function handleInputCountry() {
 function handleSubmit(e) {
   e.preventDefault();
 }
+
+function handleInputPassword(e) {
+  // 8 chars long
+  // 1 char is capital letter
+  // 1 char is a number
+  // 1 char is a special character
+
+
+  // here comes nested if statements hell
+
+  if (password.value.length < 8) {
+    applyPasswordError("Yo password must be at least 8 characters long!")
+  } else {
+    // ok, its 8 chars long, but does it have a capital letter?
+
+    if (!hasCapitalLetter(password.value)) {
+      applyPasswordError("Yo password must contain at least 1 capital letter");
+    } else {
+      // alright you got your 8 chars and your capital letter, but now input some number you gyatt dang bih
+
+      if (!hasNumber(password.value)) {
+        applyPasswordError("Password must contain at least 1 number");
+      } else {
+        // 8 chars long, capital letter, a number, now input a freaking special char
+
+        if (!hasSpecialChar(password.value)) {
+          applyPasswordError("Password must have at least 1 special character");
+        } else {
+          resetPasswordError();
+        }
+      }
+    }
+  }
+
+  function applyPasswordError(msg) {
+    password.className = "invalid";
+    passwordError.className = "error active";
+    passwordError.textContent = msg;
+  }
+
+  function resetPasswordError() {
+    password.className = "";
+    passwordError.className = "error";
+    passwordError.textContent = "";
+  }
+
+  function hasCapitalLetter(str) {
+    for (letter of Array.from(str)) {
+      if (!isNaN(letter)) {
+        continue;
+      } else {
+        // its a alphabetic letter, in here we can maybe safely compare letters with toUpperCase()
+        if (letter === letter.toUpperCase())
+          return true;
+      }
+    }
+    return false;
+  }
+
+  function hasNumber(str) {
+    for (letter of Array.from(str)) {
+      if (!isNaN(parseInt(letter))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function hasSpecialChar(str) {
+    const format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+    return format.test(str);
+  }
+}
+
