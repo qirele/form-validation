@@ -16,8 +16,8 @@
           <div class="input-wrapper">
             <label class="label" for="email">Email:</label>
             <span class="required">required</span>
-            <input type="text" name="email" id="email" />
-            <p class="error"></p>
+            <input type="text" name="email" id="email" autocomplete="off" />
+            <p class="error" aria-live="polite"></p>
           </div>
         </div>
         <div class="row">
@@ -25,38 +25,43 @@
             <label class="label" for="country">Country</label>
             <span class="required">required</span>
             <select name="country" id="country">
-              <option value="us" selected>United States</option>
+              <!-- <option value="us" selected>United States</option>
               <option value="uk">United Kingdom</option>
               <option value="ua">Ukraine</option>
               <option value="pl">Poland</option>
-              <option value="es">Spain</option>
+              <option value="es">Spain</option> -->
+              <option value="none" selected>Not selected yet</option>
+              <option value="ch">Switzerland</option>
+              <option value="de">Germany</option>
+              <option value="fr">France</option>
+              <option value="nl">Netherlands</option>
             </select>
-            <p class="error"></p>
+            <p class="error" aria-live="polite"></p>
           </div>
           <div class="input-wrapper">
             <label class="label" for="zipcode">Zip Code</label>
-            <span class="placeholder">placeholder</span>
-            <input type="text" id="zipcode" name="zipcode" />
-            <p class="error"></p>
+            <span class="placeholder" aria-hidden="true">placeholder</span>
+            <input type="text" id="zipcode" name="zipcode" autocomplete="off" />
+            <p class="error" aria-live="polite"></p>
           </div>
         </div>
         <div class="row">
           <div class="input-wrapper">
             <label class="label" for="password">Password</label>
             <span class="required">required</span>
-            <input type="password" id="password" />
-            <p class="error"></p>
+            <input type="password" id="password" name="password" />
+            <p class="error" aria-live="polite"></p>
           </div>
           <div class="input-wrapper">
             <label class="label" for="password-confirm">Confirm Password</label>
             <span class="required">required</span>
-            <input type="text" id="password-confirm" name="password-confirm" />
-            <p class="error"></p>
+            <input type="password" id="password-confirm" name="password-confirm" />
+            <p class="error" aria-live="polite"></p>
           </div>
         </div>
         <div class="row">
           <div class="submit">
-            <button type="submit">Submit</button>
+            <button type="submit" class="btn">Submit</button>
           </div>
           <div class="error-container"></div>
         </div>
