@@ -78,7 +78,7 @@ select {
 
 input.invalid,
 select.invalid {
-  outline: 1px solid red;
+  outline: 2px solid rgb(215, 18, 18);
 }
 
 .btn {
@@ -93,7 +93,7 @@ select.invalid {
   color: #1f1f1f;
 }
 
-.btn:hover {
+.btn:hover, .btn:focus {
   background: #1f1f1f;
   color: #f1f1f1;
   outline: 5px solid rgb(199, 255, 188);

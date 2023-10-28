@@ -10,10 +10,11 @@ const zipcodeError = document.querySelector("#zipcode ~ .error");
 
 form.addEventListener("submit", handleSubmit);
 email.addEventListener("input", handleInputEmail);
+email.addEventListener("focusout", handleInputEmail);
 zipcode.addEventListener("input", checkZIP);
 country.addEventListener("input", checkZIP);
 country.addEventListener("input", handleInputCountry);
-country.addEventListener("focus", handleInputCountry);
+country.addEventListener("focusout", handleInputCountry);
 password.addEventListener("input", handleInputPassword);
 
 function handleInputEmail(e) {
@@ -58,9 +59,17 @@ function checkZIP() {
   };
 
   if (country.value === "none") {
-    zipcode.className = ""
+
+    if (zipcode.value.length !== 0) {
+      zipcode.className = "invalid";
+      zipcodeError.className = "error active";
+      zipcodeError.textContent = "Select a country before providing zipcode";
+      return; 
+    }
+    zipcode.className = "";
     zipcodeError.className = "error";
     zipcodeError.textContent = "";
+
     return;
   }
 
